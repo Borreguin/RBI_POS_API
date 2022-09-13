@@ -8,7 +8,7 @@ from app import crud, models, schemas
 from app.database import engine
 from app import local_db
 
-models.Base.metadata.create_all(bind=engine)
+models.BaseClassDB.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

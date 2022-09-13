@@ -1,10 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from .database import BaseClassDB
 
 
-class User(Base):
+class User(BaseClassDB):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -15,7 +15,7 @@ class User(Base):
     home_works = relationship('HomeWork', back_populates='owner')
 
 
-class HomeWork(Base):
+class HomeWork(BaseClassDB):
     __tablename__ = 'home_works'
 
     id = Column(Integer, primary_key=True, index=True)
