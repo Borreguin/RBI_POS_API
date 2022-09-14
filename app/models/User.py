@@ -17,7 +17,7 @@ class User(BaseClassDB):
     is_active = Column(Boolean, default=True)
 
     # Relationships:
-    user_role = relationship('UserRole', back_populates='owner')
+    # roles = relationship('Role', backref='user')
 
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
