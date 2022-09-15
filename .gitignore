@@ -5,3 +5,4 @@
 /log/*
 /app_dev.db
 /app.db
+/db/*
