@@ -25,5 +25,4 @@ def create(db: Session, user: UserSchema.Create) -> User:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-
     return db_user

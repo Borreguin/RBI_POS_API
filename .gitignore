@@ -1,3 +1,7 @@
 /venv/
 /app/app.db
 /.idea/*
+/app/app_dev.db
+/log/*
+/app_dev.db
+/app.db

@@ -2,7 +2,9 @@ import uvicorn
 from fastapi import FastAPI
 
 # import general settings
-from core.config import settings
+from app.core.log_after_request import log_after_request
+from app.core.config import settings
+from app.core.exception_handler import define_handler_exception
 
 # import endpoints
 from app.endpoints import UserEndpoint, RoleEndpoint
@@ -24,13 +26,20 @@ def create_tables():
     DBBaseClass.metadata.create_all(bind=engine)
 
 
-def start_application() -> FastAPI:
+def define_loggers(app):
+    # adds general handler exception if something was not controled
+    define_handler_exception(app)
+    # adds logger for requests
+    log_after_request(app)
+
+
+def create_application() -> FastAPI:
     app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    define_loggers(app)
     include_routes(app)
     create_tables()
     return app
 
 
-if __name__ == "__main__":
-    api = start_application()
-    uvicorn.run(api, host="0.0.0.0", port=8000)
+api = create_application()
+
