@@ -1,10 +1,3 @@
 /venv/
 /app/app.db
-/.idea/.gitignore
-/.idea/dataSources.xml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/RBI_POS_API.iml
-/.idea/sqldialects.xml
-/.idea/vcs.xml
+/.idea/*

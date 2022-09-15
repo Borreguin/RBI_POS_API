@@ -1,20 +1,33 @@
 import uvicorn
-from app import app
-
-# import database models:
-from app.database import engine
-from models import User, Role
+from fastapi import FastAPI
 
 # import endpoints
-from app.endpoints import UserEndpoint
+from app.endpoints import UserEndpoint, RoleEndpoint
 
-# generate automatically tables in database:
-User.BaseClassDB.metadata.create_all(bind=engine)
-Role.BaseClassDB.metadata.create_all(bind=engine)
+# import database models:
+from app.db.session import engine
+from app.db.base import DBBaseClass
 
-# To include EndPoints:
-app.include_router(UserEndpoint.router)
+
+def include_routes(app):
+    # To include EndPoints:
+    app.include_router(UserEndpoint.router)
+    app.include_router(RoleEndpoint.router)
+
+
+def create_tables():
+    # generate automatically tables in database
+    # the corresponding tables must be imported in app.db.base.py
+    DBBaseClass.metadata.create_all(bind=engine)
+
+
+def start_application() -> FastAPI:
+    app = FastAPI()
+    include_routes(app)
+    create_tables()
+    return app
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    api = start_application()
+    uvicorn.run(api, host="0.0.0.0", port=8000)

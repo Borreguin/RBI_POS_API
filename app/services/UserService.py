@@ -1,25 +1,27 @@
+from typing import List
 from sqlalchemy.orm import Session
-
-from app.common.util import get_hashed_text
-from app.models.User import User
-from app.schemas.UserSchema import UserCreate
+from app.schemas import UserSchema
+from app.db.models.User import User
 
 
-def get_user(db: Session, user_id: int):
+def get_by_id(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
 
-def get_user_by_email(db: Session, email: str):
+def get_by_public_id(db: Session, public_id: str) -> User:
+    return db.query(User).filter(User.public_id == public_id).first()
+
+
+def get_by_email(db: Session, email: str) -> User:
     return db.query(User).filter(User.email == email).first()
 
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
+def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[User]:
     return db.query(User).offset(skip).limit(limit).all()
 
 
-def create_user(db: Session, user: UserCreate):
-    hashed_password = get_hashed_text(user.password)
-    db_user = User(email=user.email, hashed_password=hashed_password)
+def create(db: Session, user: UserSchema.Create) -> User:
+    db_user = User(**user.dict())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
