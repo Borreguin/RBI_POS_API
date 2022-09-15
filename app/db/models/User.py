@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.common.util import get_hashed_text
+from app.common.util import get_hashed_text, verify_hashed_text
 from app.db.base_class import DBBaseClass
 import uuid
 
@@ -30,7 +30,13 @@ class User(DBBaseClass):
         if self.public_id is None:
             self.public_id = str(uuid.uuid4())
         if password is not None:
-            self.hashed_password = get_hashed_text(password)
+            self.set_password(password)
+
+    def verify_password(self, to_verify) -> bool:
+        return verify_hashed_text(to_verify, self.hashed_password)
+
+    def set_password(self, password: str):
+        self.hashed_password = get_hashed_text(password)
 
     def __str__(self):
         return f"{self.email} ({self.first_name} {self.last_name}) - {self.public_id}"

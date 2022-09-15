@@ -1,6 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
+# import general settings
+from core.config import settings
+
 # import endpoints
 from app.endpoints import UserEndpoint, RoleEndpoint
 
@@ -22,7 +25,7 @@ def create_tables():
 
 
 def start_application() -> FastAPI:
-    app = FastAPI()
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
     include_routes(app)
     create_tables()
     return app
